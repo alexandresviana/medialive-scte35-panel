@@ -14,7 +14,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Verificar secrets de deploy
+        id: check
+        run: |
+          if [ -z "${{ secrets.DEPLOY_HOST }}" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "::notice::DEPLOY_HOST não configurado — deploy SSH ignorado."
+          fi
+
       - name: Deploy via SSH
+        if: steps.check.outputs.skip != 'true'
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.DEPLOY_HOST }}
