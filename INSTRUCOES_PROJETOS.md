@@ -54,12 +54,17 @@ projeto/
 5. `output: "standalone"` no `next.config` para Docker
 6. Criar `Dockerfile` multi-stage (deps → build → runner)
 
-### 2.4 Docker
+### 2.4 Docker (container único)
 
-1. **docker-compose.yml** com backend + frontend (+ nginx opcional)
-2. Healthcheck no backend antes de subir o frontend (`depends_on: condition: service_healthy`)
-3. Build args para variáveis `NEXT_PUBLIC_*` no frontend
-4. Perfil `production` para nginx quando necessário
+1. **`Dockerfile` na raiz** — multi-stage: build Next.js + Python + nginx
+2. **`scripts/start.sh`** — sobe uvicorn, Next.js e nginx no mesmo container
+3. **`nginx/nginx.docker.conf`** — proxy interno:
+   - `/` → frontend (127.0.0.1:3000)
+   - `/api/` → backend (127.0.0.1:8000)
+   - `/ws` → WebSocket backend
+4. **URLs relativas no frontend** — `NEXT_PUBLIC_API_URL=` vazio no build Docker
+5. **`docker-compose.yml`** — um serviço `app` expondo porta 80
+6. **`.dockerignore`** — excluir `node_modules`, `.next`, `.git`
 
 ### 2.5 Nginx (produção)
 
@@ -76,21 +81,18 @@ git commit -m "feat: aplicação completa com Docker e CI/CD"
 gh repo create NOME_DO_REPO --public --source=. --push
 ```
 
-### 2.7 GitHub Actions — Build de Imagens Docker
+### 2.7 GitHub Actions — Build de Imagem Docker
 
 Criar `.github/workflows/docker-build.yml`:
 
-- Trigger: push em `main`/`master`, tags `v*`, PRs
-- Registry: `ghcr.io` (GitHub Container Registry)
-- Permissões: `packages: write`
-- Jobs separados para backend e frontend
-- Cache com `type=gha` para builds mais rápidos
-- Push apenas fora de PRs (`if: github.event_name != 'pull_request'`)
+- **Uma imagem só** na raiz (`context: .`, `file: ./Dockerfile`)
+- Registry: `ghcr.io/SEU_USUARIO/SEU_REPO:latest`
+- Trigger: push em `main`, tags `v*`, PRs (build sem push)
+- Cache com `type=gha`
 
-Imagens publicadas em:
-```
-ghcr.io/SEU_USUARIO/SEU_REPO/backend:latest
-ghcr.io/SEU_USUARIO/SEU_REPO/frontend:latest
+```bash
+docker pull ghcr.io/USUARIO/REPO:latest
+docker run -p 80:80 --env-file backend/.env ghcr.io/USUARIO/REPO:latest
 ```
 
 ### 2.8 Deploy em plataformas
@@ -122,18 +124,14 @@ ghcr.io/SEU_USUARIO/SEU_REPO/frontend:latest
 cd backend && pip install -r requirements.txt && uvicorn app.main:app --reload
 cd frontend && npm install && npm run dev
 
-# Docker local
+# Docker local (container único)
 docker compose up -d --build
 
-# Com nginx (produção)
-docker compose --profile production up -d --build
-
 # Ver logs
-docker compose logs -f backend
+docker compose logs -f app
 
-# Pull imagens do GHCR
-docker pull ghcr.io/USUARIO/REPO/backend:latest
-docker pull ghcr.io/USUARIO/REPO/frontend:latest
+# Pull imagem do GHCR
+docker pull ghcr.io/USUARIO/REPO:latest
 ```
 
 ---

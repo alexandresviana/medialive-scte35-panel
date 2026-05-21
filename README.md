@@ -23,6 +23,8 @@ Painel web profissional para controle de breaks SCTE-35 no AWS MediaLive em temp
 
 ## Início Rápido (Docker)
 
+Um único container roda **nginx + backend + frontend** na porta 80.
+
 ```bash
 cp backend/.env.example backend/.env
 # Edite backend/.env com credenciais AWS
@@ -31,11 +33,17 @@ docker compose up -d --build
 ```
 
 Acesse:
-- **Frontend:** http://localhost:3000
-- **Backend API:** http://localhost:8000
-- **Swagger:** http://localhost:8000/docs
+- **App:** http://localhost
+- **API Docs:** http://localhost/docs
 
 Login padrão: `admin` / `admin123` (altere em produção)
+
+Pull da imagem publicada:
+
+```bash
+docker pull ghcr.io/alexandresviana/medialive-scte35-panel:latest
+docker run -p 80:80 --env-file backend/.env ghcr.io/alexandresviana/medialive-scte35-panel:latest
+```
 
 ## Desenvolvimento Local
 
@@ -110,9 +118,10 @@ Policy mínima necessária:
 Imagens Docker publicadas automaticamente no push para `main`:
 
 ```
-ghcr.io/SEU_USUARIO/dash-scte35-controller/backend:latest
-ghcr.io/SEU_USUARIO/dash-scte35-controller/frontend:latest
+ghcr.io/alexandresviana/medialive-scte35-panel:latest
 ```
+
+Container único com nginx (porta 80), FastAPI (8000 interno) e Next.js (3000 interno).
 
 ## Arquitetura
 
@@ -126,13 +135,14 @@ Frontend (Next.js) → HTTPS → Backend (FastAPI) → boto3 → AWS MediaLive A
 ## Estrutura do Projeto
 
 ```text
-├── backend/          # API FastAPI
-├── frontend/         # Next.js dashboard
-├── nginx/            # Reverse proxy
-├── scripts/          # Deploy scripts
-├── .github/workflows/# CI/CD Docker
+├── Dockerfile          # Container único (nginx + backend + frontend)
+├── backend/            # API FastAPI
+├── frontend/           # Next.js dashboard
+├── nginx/              # Configs nginx (docker e legado)
+├── scripts/            # start.sh, deploy-local.sh
+├── .github/workflows/  # CI/CD Docker
 ├── docker-compose.yml
-└── INSTRUCOES_PROJETOS.md  # Template para próximos projetos
+└── INSTRUCOES_PROJETOS.md
 ```
 
 ## Documentação Adicional

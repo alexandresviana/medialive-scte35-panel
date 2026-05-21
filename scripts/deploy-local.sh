@@ -9,13 +9,12 @@ if [ ! -f backend/.env ]; then
   echo "⚠️  Edite backend/.env com suas credenciais AWS antes de usar em produção."
 fi
 
-echo "Subindo serviços com Docker Compose..."
+echo "Subindo container único com Docker Compose..."
 docker compose up -d --build
 
 echo ""
 echo "✅ Aplicação disponível em:"
-echo "   Frontend: http://localhost:3000"
-echo "   Backend:  http://localhost:8000"
-echo "   API Docs: http://localhost:8000/docs"
+echo "   App:      http://localhost"
+echo "   API Docs: http://localhost/docs"
 echo ""
 echo "Login padrão: admin / admin123"
