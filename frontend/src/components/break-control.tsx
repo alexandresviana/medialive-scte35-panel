@@ -30,12 +30,12 @@ export function BreakControl({ channelId, activeBreak, onSuccess }: BreakControl
       addLog({
         timestamp: new Date().toISOString(),
         level: "INFO",
-        message: `Break iniciado — Event ID ${result.event_id}`,
+        message: `Break iniciado — ID do evento ${result.event_id}`,
         channel_id: channelId,
       });
       onSuccess();
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Erro ao iniciar break");
+      setError(e instanceof Error ? e.message : "Erro ao iniciar o break");
     } finally {
       setLoading(null);
     }
@@ -49,12 +49,12 @@ export function BreakControl({ channelId, activeBreak, onSuccess }: BreakControl
       addLog({
         timestamp: new Date().toISOString(),
         level: "INFO",
-        message: `Return to network — Event ID ${result.event_id}`,
+        message: `Volta ao ar — ID do evento ${result.event_id}`,
         channel_id: channelId,
       });
       onSuccess();
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Erro no return");
+      setError(e instanceof Error ? e.message : "Erro ao voltar ao ar");
     } finally {
       setLoading(null);
     }
@@ -63,7 +63,7 @@ export function BreakControl({ channelId, activeBreak, onSuccess }: BreakControl
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Break Control</CardTitle>
+        <CardTitle>Controle de Break</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="grid grid-cols-2 gap-4">
@@ -80,7 +80,7 @@ export function BreakControl({ channelId, activeBreak, onSuccess }: BreakControl
             />
           </div>
           <div className="space-y-2">
-            <Label>Auto Return</Label>
+            <Label>Retorno automático</Label>
             <button
               type="button"
               onClick={() => setAutoReturn(!autoReturn)}
@@ -115,7 +115,7 @@ export function BreakControl({ channelId, activeBreak, onSuccess }: BreakControl
             ) : (
               <Play className="h-5 w-5" />
             )}
-            START BREAK
+            INICIAR BREAK
           </Button>
           <Button
             variant="success"
@@ -129,7 +129,7 @@ export function BreakControl({ channelId, activeBreak, onSuccess }: BreakControl
             ) : (
               <Square className="h-5 w-5" />
             )}
-            RETURN TO NETWORK
+            VOLTAR AO AR
           </Button>
         </div>
       </CardContent>

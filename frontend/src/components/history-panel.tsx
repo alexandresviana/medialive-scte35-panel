@@ -3,6 +3,7 @@
 import { History } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatTimestamp } from "@/lib/utils";
+import { breakStatusLabel } from "@/lib/labels";
 import type { BreakHistoryEntry } from "@/lib/api";
 
 interface HistoryPanelProps {
@@ -25,7 +26,7 @@ export function HistoryPanel({ history }: HistoryPanelProps) {
               <tr className="border-b border-border text-muted-foreground text-left">
                 <th className="pb-2 pr-4 font-medium">Horário</th>
                 <th className="pb-2 pr-4 font-medium">Canal</th>
-                <th className="pb-2 pr-4 font-medium">Event ID</th>
+                <th className="pb-2 pr-4 font-medium">ID do evento</th>
                 <th className="pb-2 pr-4 font-medium">Duração</th>
                 <th className="pb-2 font-medium">Status</th>
               </tr>
@@ -52,7 +53,7 @@ export function HistoryPanel({ history }: HistoryPanelProps) {
                             : "bg-broadcast-green/20 text-broadcast-green"
                         }`}
                       >
-                        {entry.status}
+                        {breakStatusLabel(entry.status)}
                       </span>
                     </td>
                   </tr>

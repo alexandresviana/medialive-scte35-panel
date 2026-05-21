@@ -3,6 +3,7 @@
 import { Activity, Signal, Tv } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn, formatCountdown } from "@/lib/utils";
+import { channelStateLabel, scte35StatusLabel } from "@/lib/labels";
 import type { ChannelStatus } from "@/lib/api";
 
 interface ChannelCardProps {
@@ -44,25 +45,25 @@ export function ChannelCard({ channel, selected, onSelect }: ChannelCardProps) {
           <div>
             <p className="text-muted-foreground text-xs">Estado</p>
             <p className={cn("font-semibold", isLive ? "text-broadcast-green" : "text-muted-foreground")}>
-              {channel.state}
+              {channelStateLabel(channel.state)}
             </p>
           </div>
           <div>
             <p className="text-muted-foreground text-xs">SCTE-35</p>
             <p className={cn("font-semibold", onBreak ? "text-broadcast-red" : "text-broadcast-blue")}>
-              {channel.scte35_status}
+              {scte35StatusLabel(channel.scte35_status)}
             </p>
           </div>
         </div>
 
         {onBreak && channel.break_remaining_seconds != null && (
           <div className="rounded-lg bg-broadcast-red/10 border border-broadcast-red/30 p-3 text-center">
-            <p className="text-xs text-broadcast-red uppercase tracking-wider mb-1">Break Ativo</p>
+            <p className="text-xs text-broadcast-red uppercase tracking-wider mb-1">Break ativo</p>
             <p className="text-3xl font-mono font-bold text-broadcast-red">
               {formatCountdown(channel.break_remaining_seconds)}
             </p>
             {channel.break_event_id && (
-              <p className="text-xs text-muted-foreground mt-1">Event ID: {channel.break_event_id}</p>
+              <p className="text-xs text-muted-foreground mt-1">ID do evento: {channel.break_event_id}</p>
             )}
           </div>
         )}
@@ -70,11 +71,11 @@ export function ChannelCard({ channel, selected, onSelect }: ChannelCardProps) {
         <div className="flex items-center gap-4 text-xs text-muted-foreground">
           <span className="flex items-center gap-1">
             <Signal className="h-3 w-3" />
-            IN: {channel.input_bitrate ? `${channel.input_bitrate} Mbps` : "—"}
+            Entrada: {channel.input_bitrate ? `${channel.input_bitrate} Mbps` : "—"}
           </span>
           <span className="flex items-center gap-1">
             <Activity className="h-3 w-3" />
-            OUT: {channel.output_bitrate ? `${channel.output_bitrate} Mbps` : "—"}
+            Saída: {channel.output_bitrate ? `${channel.output_bitrate} Mbps` : "—"}
           </span>
         </div>
       </CardContent>

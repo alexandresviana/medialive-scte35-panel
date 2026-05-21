@@ -15,7 +15,7 @@ export function Header() {
           </div>
           <div>
             <h1 className="text-lg font-bold tracking-tight">SCTE-35 Controller</h1>
-            <p className="text-xs text-muted-foreground">AWS MediaLive NOC Panel</p>
+            <p className="text-xs text-muted-foreground">Painel NOC AWS MediaLive</p>
           </div>
         </div>
 
@@ -27,7 +27,7 @@ export function Header() {
               <WifiOff className="h-4 w-4 text-broadcast-red" />
             )}
             <span className="text-muted-foreground">
-              {wsConnected ? "Live" : "Reconnecting..."}
+              {wsConnected ? "Ao vivo" : "Reconectando..."}
             </span>
           </div>
           {username && (

@@ -41,7 +41,7 @@ export default function LoginPage() {
             <Radio className="h-7 w-7 text-primary" />
           </div>
           <CardTitle className="text-2xl">SCTE-35 Controller</CardTitle>
-          <p className="text-sm text-muted-foreground">AWS MediaLive NOC Panel</p>
+          <p className="text-sm text-muted-foreground">Painel NOC AWS MediaLive</p>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">

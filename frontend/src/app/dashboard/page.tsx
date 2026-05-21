@@ -97,7 +97,7 @@ export default function DashboardPage() {
         {/* Channel config */}
         <div className="rounded-xl border bg-card/50 p-4">
           <Label htmlFor="channels" className="mb-2 block">
-            Channel IDs (separados por vírgula)
+            IDs dos canais (separados por vírgula)
           </Label>
           <Input
             id="channels"
