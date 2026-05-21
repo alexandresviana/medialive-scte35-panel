@@ -4,9 +4,14 @@ import path from "path";
 const nextConfig: NextConfig = {
   output: "standalone",
   outputFileTracingRoot: path.join(__dirname),
-  env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000",
-    NEXT_PUBLIC_WS_URL: process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:8000/ws",
+  // Em dev, proxy /api para o backend local (URLs relativas no browser)
+  async rewrites() {
+    if (process.env.NODE_ENV === "development") {
+      return [
+        { source: "/api/:path*", destination: "http://127.0.0.1:8000/api/:path*" },
+      ];
+    }
+    return [];
   },
 };
 

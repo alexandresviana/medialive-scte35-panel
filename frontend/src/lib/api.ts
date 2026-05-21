@@ -1,7 +1,6 @@
-const API_URL =
-  process.env.NEXT_PUBLIC_API_URL !== undefined
-    ? process.env.NEXT_PUBLIC_API_URL
-    : "http://localhost:8000";
+// URL relativa por padrão — funciona com nginx/Docker em produção.
+// Override via NEXT_PUBLIC_API_URL apenas se o frontend estiver em outro domínio.
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 
 export interface TokenResponse {
   access_token: string;
